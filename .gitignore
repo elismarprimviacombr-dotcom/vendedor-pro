@@ -1,0 +1,15 @@
+# Dependências
+node_modules/
+
+# Build de produção
+dist/
+
+# Variáveis de ambiente reais — NUNCA versionar
+.env
+.env.local
+.env.*.local
+
+# Logs e cache
+*.log
+.DS_Store
+.vite/
