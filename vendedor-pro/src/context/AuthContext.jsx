@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { getSession, onAuthStateChange, getPerfil, signOut as signOutService } from '../services/authService';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { supabase } from '../services/supabaseClient';
 
 const AuthContext = createContext(null);
 
@@ -8,56 +8,45 @@ export function AuthProvider({ children }) {
   const [perfil, setPerfil] = useState(null);
   const [carregando, setCarregando] = useState(true);
 
-  async function carregarPerfil(sessaoAtual) {
-    if (!sessaoAtual) {
-      setPerfil(null);
-      return;
-    }
+  const carregarPerfil = useCallback(async (sessao) => {
+    if (!sessao) { setPerfil(null); return; }
     try {
-      const dados = await getPerfil(sessaoAtual.user.id);
-      setPerfil(dados);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('Não foi possível carregar o perfil do usuário:', err.message);
-      setPerfil(null);
+      const { data } = await supabase.from('usuarios').select('*').eq('id', sessao.user.id).single();
+      setPerfil(data ? { ...data, email: sessao.user.email } : null);
+    } catch (e) {
+      setPerfil({ email: sessao.user.email, papel: 'vendedor', nome: sessao.user.email.split('@')[0] });
     }
-  }
+  }, []);
 
   useEffect(() => {
-    getSession().then(async (s) => {
+    supabase.auth.getSession().then(({ data: { session: s } }) => {
       setSession(s);
-      await carregarPerfil(s);
-      setCarregando(false);
+      carregarPerfil(s).finally(() => setCarregando(false));
     });
 
-    const subscription = onAuthStateChange(async (s) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => {
       setSession(s);
-      await carregarPerfil(s);
+      carregarPerfil(s);
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [carregarPerfil]);
 
   async function signOut() {
-    await signOutService();
+    await supabase.auth.signOut();
     setSession(null);
     setPerfil(null);
   }
 
-  const value = {
-    session,
-    perfil,
-    carregando,
-    autenticado: !!session,
-    isAdmin: perfil?.papel === 'admin',
-    signOut,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ session, perfil, carregando, autenticado: !!session, isAdmin: perfil?.papel === 'admin', signOut }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth precisa ser usado dentro de <AuthProvider>');
+  if (!ctx) throw new Error('useAuth precisa estar dentro de AuthProvider');
   return ctx;
 }
