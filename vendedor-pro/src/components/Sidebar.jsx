@@ -18,6 +18,10 @@ const IC = {
   config: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a7.6 7.6 0 000-3l1.8-1.4-2-3.3-2.1.6A7.4 7.4 0 0014.5 4.9L14 2h-4l-.5 2.4a7.4 7.4 0 00-2.6 1.5l-2.1-.6-2 3.3L4.6 10.5a7.6 7.6 0 000 3l-1.8 1.4 2 3.3 2.1-.6c.76.66 1.64 1.17 2.6 1.5L10 22h4l.5-2.4c.96-.33 1.84-.84 2.6-1.5l2.1.6 2-3.3-1.8-1.4z"/></svg>,
   logout: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>,
   wifi: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>,
+  perdidas: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>,
+  compras: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18l-2 11H5L3 6z"/><path d="M3 6L2 3H0"/><circle cx="8" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg>,
+  metas: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>,
+  fechamento: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M2 11h20"/><path d="M7 15h.01M11 15h4"/></svg>,
 };
 
 const NAV_PRINCIPAL = [
@@ -48,6 +52,12 @@ export default function Sidebar() {
           {IC[icon]}<span>{label}</span>
         </NavLink>
       ))}
+
+      <div className="nav-section">Autopeças</div>
+      <NavLink to="/vendas-perdidas-auto" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>{IC.perdidas}<span>Vendas Perdidas</span></NavLink>
+      <NavLink to="/compras" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>{IC.compras}<span>Compras</span></NavLink>
+      <NavLink to="/metas" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>{IC.metas}<span>Metas</span></NavLink>
+      <NavLink to="/fechamento-diario" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>{IC.fechamento}<span>Fechamento Diário</span></NavLink>
 
       <div className="nav-section">Extras</div>
       <button className="nav-item" style={{border:'none',width:'100%',textAlign:'left'}} onClick={()=>navigate('/relatorios')}>{IC.importar}<span>Importar Contatos</span></button>

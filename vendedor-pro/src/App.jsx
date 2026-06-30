@@ -16,6 +16,10 @@ import Produtos from './pages/Produtos';
 import Agenda from './pages/Agenda';
 import Relatorios from './pages/Relatorios';
 import Configuracoes from './pages/Configuracoes';
+import VendasPerdidasAuto from './pages/VendasPerdidasAuto';
+import Compras from './pages/Compras';
+import Metas from './pages/Metas';
+import FechamentoDiario from './pages/FechamentoDiario';
 
 export default function App() {
   return (
@@ -35,6 +39,10 @@ export default function App() {
             <Route path="agenda" element={<Agenda />} />
             <Route path="relatorios" element={<Relatorios />} />
             <Route path="configuracoes" element={<Configuracoes />} />
+            <Route path="vendas-perdidas-auto" element={<VendasPerdidasAuto />} />
+            <Route path="compras" element={<Compras />} />
+            <Route path="metas" element={<Metas />} />
+            <Route path="fechamento-diario" element={<FechamentoDiario />} />
           </Route>
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
